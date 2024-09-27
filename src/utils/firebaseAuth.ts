@@ -1,14 +1,12 @@
 import { SalonDataType } from "@/types/SalonDataType";
 import {firebaseConfig} from "./config"
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import {  collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { BookingType } from "@/types/BookingDataType";
 // import moment from "moment";
 
 const FirebaseApp = initializeApp(firebaseConfig);
 const firestore=getFirestore(FirebaseApp)
-const storage=getStorage(FirebaseApp) 
 
 export const salonDataFetching = async ():Promise<SalonDataType[] | null> => {
     try {
@@ -88,17 +86,6 @@ export const salonDataFetching = async ():Promise<SalonDataType[] | null> => {
     }
   };
   
- interface BookingDataType {
-    id: string;
-    salonCode: string;
-    userId: string;
-    serviceName: string;
-    bookingDate: string;
-    bookingTime: string;
-    status: string;
-    // Add other fields relevant to your Booking documents
-  }
-
 export const fetchBookingsBySalonCode = async (salonCode: string): Promise<BookingType[] | null> => {
   try {
     console.log("salon code"+salonCode)

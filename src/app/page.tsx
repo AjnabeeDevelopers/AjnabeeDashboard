@@ -6,16 +6,6 @@ import { SalonDataType } from "@/types/SalonDataType";
 import { salonDataFetching } from "@/utils/firebaseAuth";
 import { useEffect, useState } from "react";
 
-type Salon = {
-  id: string;
-  name: string;
-  ownerIdentificationProofUrl: string;
-  agreementDocumentUrl: null | string;
-  address: string;
-  city: string;
-  country: string;
-  isVerified: boolean;
-};
 
 export default function Home() {
   const [SalonData, setSalonData] = useState<SalonDataType[] |  null>([]); // Initialize as an empty array

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { useCallback, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -22,7 +22,6 @@ import { useForm } from "react-hook-form";
 import { SalonVerificationSchema } from "@/schemas/VerfiySalonSchema";
 import { BookingCard } from "./BookingCards";
 import { BookingType } from "@/types/BookingDataType";
-import { Button } from "@/components/ui/button";
 
 export interface SalonDataType {
   id: string;
@@ -101,7 +100,7 @@ const Page = () => {
     }
   }, [params.salonId, setValue]);
 
-  const handleSwitchChange = async (checked: boolean) => {
+  const handleSwitchChange = async () => {
     setIsSwitchLoading(true);
     try {
       const newStatus = await toggleSalonVerificationStatus(params.salonId as string);
