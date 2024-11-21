@@ -3,6 +3,7 @@ import {firebaseConfig} from "./config"
 import { initializeApp } from "firebase/app";
 import {  collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { BookingType } from "@/types/BookingDataType";
+import { salonCategoryType } from "@/types/SalonCategoryDatatype";
 // import moment from "moment";
 
 const FirebaseApp = initializeApp(firebaseConfig);
@@ -38,6 +39,31 @@ export const salonDataFetching = async ():Promise<SalonDataType[] | null> => {
       return null
     }
   };
+
+
+export const fetchAllCategoriesBySalonId = async (salonId: string): Promise<salonCategoryType[] | null> => {
+  try {
+    const categoriesCollectionRef = collection(firestore, 'SalonList', salonId, 'categories'); // Reference to the 'categories' subcollection
+    const categoriesQuery = query(categoriesCollectionRef); // Create a query for the subcollection
+    const querySnapshot = await getDocs(categoriesQuery); // Fetch all documents in the subcollection
+
+    if (!querySnapshot.empty) {
+      const categories: salonCategoryType[] = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data() as salonCategoryType
+      }) as salonCategoryType);
+      console.log("Categories data:", categories);
+      return categories; // Return the list of categories
+    } else {
+      console.log("No categories found!");
+      return null; // Return null if no documents found
+    }
+  } catch (error) {
+    console.error("Error fetching categories by Salon ID:", error);
+    return null;
+  }
+};
+
 
   export const fetchSalonVerificationStatus = async (id: string): Promise<boolean | null> => {
     try {
