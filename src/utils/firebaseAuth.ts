@@ -1,4 +1,4 @@
-import { SalonDataType } from "@/types/SalonDataType";
+import { SalonAdminDataType, SalonDataType } from "@/types/SalonDataType";
 import {firebaseConfig} from "./config"
 import { initializeApp } from "firebase/app";
 import {  collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
@@ -20,7 +20,31 @@ export const salonDataFetching = async ():Promise<SalonDataType[] | null> => {
       return null
     }
   };
-
+  export const fetchSalonAdminDetailsById = async (id: string): Promise<SalonAdminDataType | null> => {
+    try {
+      // Reference to the SalonAdmin collection
+      const salonAdminCollectionRef = collection(firestore, 'SalonAdmin');
+  
+      // Query to find a document where the uid matches the given id
+      const salonQuery = query(salonAdminCollectionRef, where('uid', '==', id));
+  
+      // Execute the query
+      const querySnapshot = await getDocs(salonQuery);
+  
+      // If a document is found, return the first match (if multiple documents can exist with the same uid, handle accordingly)
+      if (!querySnapshot.empty) {
+        const salonDoc = querySnapshot.docs[0];
+        console.log('Salon Admin data:', salonDoc.data());
+        return { id: salonDoc.id, ...salonDoc.data() } as SalonAdminDataType;
+      } else {
+        console.log('No document found with the given uid');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching salon by ID:', error);
+      return null;
+    }
+  };
 
   export const fetchSalonById = async (id:string):Promise<SalonDataType | null> => {
     try {

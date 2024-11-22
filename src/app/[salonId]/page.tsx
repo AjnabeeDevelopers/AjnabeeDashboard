@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   fetchAllCategoriesBySalonId,
   fetchBookingsBySalonCode,
+  fetchSalonAdminDetailsById,
   fetchSalonById,
   fetchSalonVerificationStatus,
   toggleSalonVerificationStatus,
@@ -23,7 +24,7 @@ import { useForm } from "react-hook-form";
 import { SalonVerificationSchema } from "@/schemas/VerfiySalonSchema";
 import { BookingCard } from "./BookingCards";
 import { BookingType } from "@/types/BookingDataType";
-import { SalonDataType } from "@/types/SalonDataType";
+import { SalonAdminDataType, SalonDataType } from "@/types/SalonDataType";
 import { salonCategoryType } from "@/types/SalonCategoryDatatype";
 import ServiceCard from "./ServiceCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -37,6 +38,9 @@ const Page = () => {
   const [SalonCategoriesData, setSalonCategoriesData] = useState<salonCategoryType[] | null>(null)
   const [LoadingCategoriesSalons, setLoadingCategoriesSalons] = useState(false)
 
+  const [SalonAdminDetals, setSalonAdminDetals] = useState<SalonAdminDataType | null>(null)
+  const [LoadingSalonAdminDetails, setLoadingSalonAdminDetails] = useState(false)
+
   const { register, watch, setValue } = useForm({
     resolver: zodResolver(SalonVerificationSchema),
   });
@@ -48,11 +52,18 @@ const Page = () => {
   useEffect(() => {
     const fetchSalonData = async () => {
       setLoadingSalons(true);
+      setLoadingSalonAdminDetails(true);
+
       const data = await fetchSalonById(params.salonId as string);
       const Bookingdata = await fetchBookingsBySalonCode(data?.salonCode as string);
+      const SalonAdminData=await fetchSalonAdminDetailsById(params.salonId as string)
+
+      setSalonAdminDetals(SalonAdminData)
       setIsVerifiedSalonStatus(data?.isverified as boolean);
       setBookings(Bookingdata);
       setSalonData(data);
+
+      setLoadingSalonAdminDetails(false);
       setLoadingSalons(false);
     };
     fetchSalonData();
@@ -110,6 +121,15 @@ const Page = () => {
     );
   }
 
+  if(LoadingSalonAdminDetails){
+    return (
+      <div className="text-center py-10">
+        <div className="animate-spin h-10 w-10 border-b-2 border-gray-900 rounded-full"></div>
+        <p className="mt-4 text-sm">Loading salon Admin data...</p>
+      </div>
+    );
+  }
+
   if (!SalonData) {
     return <div className="text-center py-10">No salons found.</div>;
   }
@@ -155,6 +175,26 @@ const Page = () => {
       
       <Table className="min-w-full mb-8">
         <TableBody>
+        <TableRow>
+            <TableHead>Salon Owner</TableHead>
+            <TableCell>{SalonAdminDetals?.name === null ? " Name not present" : SalonAdminDetals?.name }</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableHead>Owner Email Id</TableHead>
+            <TableCell>{SalonAdminDetals?.email === null ? " Email not present" : SalonAdminDetals?.email }</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableHead>Owner mobile Number</TableHead>
+            <TableCell>{SalonAdminDetals?.mobileNumber === null ? " Mobile Number not present" : SalonAdminDetals?.mobileNumber }</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableHead>Owner profile URL</TableHead>
+            <TableCell>{SalonAdminDetals?.profileUrl === null ? " Profile URL not present" : SalonAdminDetals?.profileUrl }</TableCell>
+          </TableRow>
+
           <TableRow>
             <TableHead>Address</TableHead>
             <TableCell>{SalonData.address}</TableCell>

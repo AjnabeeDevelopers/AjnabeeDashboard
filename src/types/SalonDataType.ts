@@ -62,3 +62,12 @@ export interface SalonDataType {
   highlightVideoUrls: string[]; // Array of highlight video URLs
   introductoryVideoUrl: string; // URL to the introductory video
 }
+
+export interface SalonAdminDataType{
+  id:string,
+  email:string,
+  mobileNumber:number,
+  name:string,
+  profileUrl:string,
+  uid:string
+}
