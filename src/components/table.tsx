@@ -18,7 +18,6 @@ import {
 import { Button } from "./ui/button"
 import { usePathname, useRouter } from "next/navigation"
 import { DeleteSalonAlertDialog } from "./deleteSalonAlertDialog"
-import { useState } from "react"
 
 type Salon = {
   id: string,
@@ -82,7 +81,7 @@ console.log(pathname)
   {
     header: "Delete Salon",
     accessorFn: (row: { name: string; id: string }) => ({ name: row.name, id: row.id }), 
-    cell: ({ cell, row }) => {
+    cell: ({ row }) => {
       return <DeleteSalonAlertDialog 
           salonID={row.original.id} 
           salonName={row.original.name} 
@@ -123,7 +122,6 @@ console.log(pathname)
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const [dialogOpen, setDialogOpen] = useState(false)
 
 
   return (

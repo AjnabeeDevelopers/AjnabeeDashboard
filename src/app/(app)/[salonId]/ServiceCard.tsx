@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 interface ServiceCardProps {
@@ -17,7 +18,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 }) => {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
-      <img
+      <Image
         src={image}
         alt={serviceName}
         className="w-full h-40 object-cover rounded-md mb-4"
